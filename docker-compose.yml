@@ -1,0 +1,23 @@
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - TZ=America/Guayaquil
+    volumes:
+      - ./n8n:/home/node/.n8n
+    depends_on:
+      - ollama
+    restart: unless-stopped
